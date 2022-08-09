@@ -19,6 +19,7 @@ const resetTodos = () => {
     { id: nanoid(5), name: 'laundry', completed: false },
     { id: nanoid(5), name: 'dishes', completed: false },
     { id: nanoid(5), name: 'groceries', completed: false },
+    { id: nanoid(5), name: 'walk the dog', completed: false},
   ]
 }
 
