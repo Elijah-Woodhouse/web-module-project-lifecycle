@@ -11,7 +11,7 @@ const initialState = {
       completed: false,
     }],
     textInput: "",
-    onError: "Your good. No Errors"
+    error: "Your good. No Errors"
 }
 
 
@@ -34,6 +34,13 @@ export default class App extends React.Component {
     this.state = initialState;
   }
 
+  onTextInputChange = event => {
+    const { value } = event.target
+    this.setState({ ...this.state, textInput: value})
+    console.log(this.state);
+  }
+
+
   fetchAllTodos = () => {
     axios.get(URL)
     .then(res => {
@@ -41,12 +48,13 @@ export default class App extends React.Component {
       console.log(res.data.data);
     })
     .catch(err => {
+      this.setState({ ...this.state, error: err.response.data.message })
       debugger
     })
   }
 
   componentDidMount() {
-    this.fetchAllTodos();
+    this.fetchAllTodos()
   }
 
   render() {
@@ -64,13 +72,10 @@ export default class App extends React.Component {
           }
           </ul>
           <form>
-            <label>
-              <input
-              type="text"
-              />
-            </label>
+            <input value={this.state.textInput} onChange={this.onTextInputChange} type="text" placeholder="Add Task"/>
+            <input type="submit"/>
+            <button>Clear Finished Tasks</button>
           </form>
-          <button>Add Task</button>
         </div>
     )
 
