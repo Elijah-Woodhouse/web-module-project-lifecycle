@@ -11,7 +11,8 @@ const initialState = {
       completed: false,
     }],
     textInput: "",
-    error: ""
+    error: "",
+    display: true,
 }
 
 
@@ -76,6 +77,11 @@ export default class App extends React.Component {
     .catch(this.setResponseError)
 }
 
+
+  toggleFinished = () => {
+    this.setState({ ...this.state, display: !this.state.display })
+  }
+
   componentDidMount() {
     this.fetchAllTodos()
   }
@@ -87,19 +93,20 @@ export default class App extends React.Component {
           <div id="todos">
             <h2>Todos: </h2>
           {
-            this.state.todos.map(todo => (
-              <div key={todo.id} onClick={this.toggleCompleted(todo.id)}>
-              {todo.name} {todo.completed ? "👌😎🥹😇😘🥰" : ""}
-              </div>
-            ))
+            this.state.todos.reduce((acc, todo) => {
+              if (this.state.display || !todo.completed) return acc.concat(
+                <div onClick={this.toggleCompleted(todo.id)} key={todo.id}>{todo.name} {todo.completed ? "👌" : ""}</div>
+              )
+              return acc
+            }, [])
           }
           </div>
 
           <form onSubmit={this.onSubmit}>
             <input value={this.state.textInput} onChange={this.onTextInputChange} type="text" placeholder="Add Task"/>
             <input type="submit"/>
-            <button>Clear Finished Tasks</button>
           </form>
+          <button onClick={this.toggleFinished}>{this.state.display ? "hide" : "show"} Clear Finished Tasks</button>
         </div>
     )
 
